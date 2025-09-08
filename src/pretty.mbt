@@ -1,5 +1,5 @@
 ///|
-fn group(xs : Array[Doc], max_column~ : Int = 80) -> Array[ArrayView[Doc]] {
+fn group(xs : Array[Doc], max_column? : Int = 80) -> Array[ArrayView[Doc]] {
   let res = []
   let mut width = 0
   let mut start = 0
@@ -18,7 +18,7 @@ fn group(xs : Array[Doc], max_column~ : Int = 80) -> Array[ArrayView[Doc]] {
 }
 
 ///|
-fn pretty_print(json : Json, max_column~ : Int = 80) -> Doc {
+fn pretty_print(json : Json, max_column? : Int = 80) -> Doc {
   match json {
     Array(xs) => {
       let xs = xs.map(fn(x) { pretty_print(x) })
@@ -32,7 +32,7 @@ fn pretty_print(json : Json, max_column~ : Int = 80) -> Doc {
       }
       let mut i = 0
       let height = doc.height()
-      let doc = doc._
+      let doc = doc.inner()
         .iter()
         .map(fn(line) {
           i += 1
@@ -77,31 +77,31 @@ fn pretty_print(json : Json, max_column~ : Int = 80) -> Doc {
 ///|
 test "JSON/array" {
   let arr : Json = Array(Array::makei(100, fn { x => x.to_json() }))
-  inspect!(
+  inspect(
     pretty_print(arr),
-    content=
+    content=(
       #|[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
       #|23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43,
       #|44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64,
       #|65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85,
       #|86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99]
       #|
-    ,
+    ),
   )
 }
 
 ///|
 test "JSOM/pretty_print" {
   let json : Json = { "x": 1, "y": 2 }
-  inspect!(
+  inspect(
     pretty_print(json),
-    content=
+    content=(
       #|{
       #|  "x" : 1,
       #|  "y" : 2
       #|}
       #|
-    ,
+    ),
   )
   let expected : Json = {
     "glossary": {
@@ -125,9 +125,9 @@ test "JSOM/pretty_print" {
       },
     },
   }
-  inspect!(
+  inspect(
     pretty_print(expected),
-    content=
+    content=(
       #|{
       #|  "glossary" : {
       #|    "title" : "example glossary",
@@ -151,11 +151,11 @@ test "JSOM/pretty_print" {
       #|  }
       #|}
       #|
-    ,
+    ),
   )
   let str_json = pretty_print(expected).to_string()
-  let actual = @json.parse!(str_json)
-  assert_eq!(expected, actual)
+  let actual = @json.parse(str_json)
+  assert_eq(expected, actual)
 }
 
 ///|
@@ -163,5 +163,5 @@ test "stack overflow test" {
   let len = 1 << 16
   let arr = Array(Array::makei(len, fn { i => i.to_json() }))
   let str = pretty_print(arr).to_string()
-  inspect!(str.length(), content="447643")
+  inspect(str.length(), content="447643")
 }

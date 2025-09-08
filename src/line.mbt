@@ -1,15 +1,15 @@
 ///|
-pub fn Line::from_string(indentation~ : Int = 0, str : &IsString) -> Line {
+pub fn Line::from_string(indentation? : Int = 0, str : &IsString) -> Line {
   Line::new(indentation~, @immut_deque.singleton(str))
 }
 
 ///|
-pub fn Line::from_iter(indentation~ : Int = 0, iter : Iter[&IsString]) -> Line {
+pub fn Line::from_iter(indentation? : Int = 0, iter : Iter[&IsString]) -> Line {
   Line::new(indentation~, @immut_deque.from_iter(iter))
 }
 
 ///|
-pub fn Line::new(indentation~ : Int = 0, deque : Deque[&IsString]) -> Line {
+pub fn Line::new(indentation? : Int = 0, deque : Deque[&IsString]) -> Line {
   { inden: indentation, texts: deque }
 }
 
