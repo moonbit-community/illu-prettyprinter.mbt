@@ -25,7 +25,7 @@ pub fn Doc::empty() -> Doc {
 
 ///|
 pub fn Doc::envelop(self : Doc, left~ : &IsString, right~ : &IsString) -> Doc {
-  match self._.uncons() {
+  match self.inner().uncons() {
     None => @immut_deque.empty()
     Some((top, t)) =>
       match t.unsnoc() {
@@ -38,14 +38,14 @@ pub fn Doc::envelop(self : Doc, left~ : &IsString, right~ : &IsString) -> Doc {
 ///|
 pub fn Doc::joinline(
   self : Doc,
-  separator~ : &IsString? = None,
-  bot : Doc
+  separator? : &IsString? = None,
+  bot : Doc,
 ) -> Doc {
   let top = self
-  match top._.unsnoc() {
+  match top.inner().unsnoc() {
     None => bot
     Some((top_last, top_init)) =>
-      match bot._.uncons() {
+      match bot.inner().uncons() {
         None => top
         Some((bot_head, bot_tail)) => {
           let bot_head = match separator {
@@ -61,19 +61,19 @@ pub fn Doc::joinline(
 
 ///|
 pub fn Doc::height(self : Doc) -> Int {
-  self._.foldl(0, fn(acc, _) { acc + 1 })
+  self.inner().foldl(0, fn(acc, _) { acc + 1 })
 }
 
 ///|
 pub fn Doc::lastline_width(self : Doc) -> Int {
-  match self._.unsnoc() {
+  match self.inner().unsnoc() {
     None => 0
     Some((last, _)) => last.width()
   }
 }
 
 ///|
-pub fn maximum[T : Compare](iter : Iter[T]) -> T? {
+pub fn[T : Compare] maximum(iter : Iter[T]) -> T? {
   let mut res = None
   for x in iter {
     match res {
@@ -86,12 +86,12 @@ pub fn maximum[T : Compare](iter : Iter[T]) -> T? {
 
 ///|
 pub fn Doc::width(self : Doc) -> Int {
-  (self._.iter().map(Line::width) |> maximum).unwrap()
+  (self.inner().iter().map(Line::width) |> maximum).unwrap()
 }
 
 ///|
 pub fn Doc::join(self : Doc, separator~ : &IsString) -> Line {
-  match self._.uncons() {
+  match self.inner().uncons() {
     None => Line::empty()
     Some((x, xs)) =>
       xs.foldl(x, fn(acc, line) { acc.append(line.cons(separator)) })
@@ -100,12 +100,12 @@ pub fn Doc::join(self : Doc, separator~ : &IsString) -> Line {
 
 ///|
 pub fn Doc::indent(self : Doc, n : Int) -> Doc {
-  self._.map(fn(line) { line.indent(n) })
+  self.inner().map(fn(line) { line.indent(n) })
 }
 
 ///|
 pub fn Doc::indent_rest(self : Doc, n : Int) -> Doc {
-  match self._.uncons() {
+  match self.inner().uncons() {
     None => @immut_deque.empty()
     Some((x, xs)) => xs.map(fn(line) { line.indent(n) }).cons(x)
   }
@@ -113,7 +113,7 @@ pub fn Doc::indent_rest(self : Doc, n : Int) -> Doc {
 
 ///|
 pub impl Show for Doc with output(self, logger) {
-  for line in self._ {
+  for line in self.inner() {
     for text in line {
       text.write_string(logger)
     }
@@ -123,7 +123,7 @@ pub impl Show for Doc with output(self, logger) {
 
 ///|
 pub impl Show for Doc with to_string(self) {
-  let size_hint = self._.foldl(0, fn(acc, line) {
+  let size_hint = self.inner().foldl(0, fn(acc, line) {
     line.texts.foldl(acc, fn(acc, text) { acc + text.length() })
   })
   let builder = StringBuilder::new(size_hint~)
@@ -133,5 +133,5 @@ pub impl Show for Doc with to_string(self) {
 
 ///|
 pub fn Doc::vertical_concat(self : Doc, other : Doc) -> Doc {
-  self._.append(other._)
+  self.inner().append(other.inner())
 }

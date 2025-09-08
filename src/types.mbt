@@ -1,5 +1,5 @@
 ///|
-typealias Deque[A] = @immut_deque.T[A]
+typealias @immut_deque.T as Deque
 
 ///|
 struct Line {
@@ -8,5 +8,6 @@ struct Line {
 }
 
 // derive(Show)
+
 ///|
-type Doc Deque[Line]
+struct Doc(Deque[Line])
