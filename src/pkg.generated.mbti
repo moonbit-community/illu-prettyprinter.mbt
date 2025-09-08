@@ -1,0 +1,53 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "illusory0x0/prettyprinter"
+
+import(
+  "illusory0x0/immut_deque"
+  "moonbitlang/core/string"
+)
+
+// Values
+fn[T : Compare] maximum(Iter[T]) -> T?
+
+// Errors
+
+// Types and methods
+type Doc
+fn Doc::empty() -> Self
+fn Doc::envelop(Self, left~ : &IsString, right~ : &IsString) -> Self
+fn Doc::from_iter(Iter[Line]) -> Self
+fn Doc::from_line(Line) -> Self
+fn Doc::from_string(&IsString) -> Self
+fn Doc::height(Self) -> Int
+fn Doc::indent(Self, Int) -> Self
+fn Doc::indent_rest(Self, Int) -> Self
+fn Doc::join(Self, separator~ : &IsString) -> Line
+fn Doc::joinline(Self, separator? : &IsString?, Self) -> Self
+fn Doc::lastline_width(Self) -> Int
+fn Doc::new(@immut_deque.T[Line]) -> Self
+fn Doc::vertical_concat(Self, Self) -> Self
+fn Doc::width(Self) -> Int
+impl Show for Doc
+
+type Line
+fn Line::append(Self, Self) -> Self
+fn Line::cons(Self, &IsString) -> Self
+fn Line::empty() -> Self
+fn Line::from_iter(indentation? : Int, Iter[&IsString]) -> Self
+fn Line::from_string(indentation? : Int, &IsString) -> Self
+fn Line::indent(Self, Int) -> Self
+fn Line::iter(Self) -> Iter[&IsString]
+fn Line::new(indentation? : Int, @immut_deque.T[&IsString]) -> Self
+fn Line::snoc(Self, &IsString) -> Self
+fn Line::width(Self) -> Int
+
+// Type aliases
+
+// Traits
+pub(open) trait IsString : Show {
+  length(Self) -> Int
+  write_string(Self, &Logger) -> Unit
+}
+impl IsString for String
+impl IsString for @string.View
+

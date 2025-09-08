@@ -47,6 +47,6 @@ pub fn Line::width(self : Line) -> Int {
 
 ///|
 pub fn Line::iter(self : Line) -> Iter[&IsString] {
-  self.texts.iter().prepend(" ".repeat(self.inden))
+  Iter::singleton(" ".repeat(self.inden)) + self.texts.iter()
   // TODO 
 }
