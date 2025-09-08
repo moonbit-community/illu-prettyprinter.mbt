@@ -32,7 +32,8 @@ fn pretty_print(json : Json, max_column? : Int = 80) -> Doc {
       }
       let mut i = 0
       let height = doc.height()
-      let doc = doc.inner()
+      let doc = doc
+        .inner()
         .iter()
         .map(fn(line) {
           i += 1
@@ -46,7 +47,7 @@ fn pretty_print(json : Json, max_column? : Int = 80) -> Doc {
       doc.envelop(left="[", right="]")
     }
     String(val) => Doc::from_string(val.escape())
-    Number(val) => Doc::from_string(val.to_string())
+    Number(val, ..) => Doc::from_string(val.to_string())
     False => Doc::from_string("false")
     True => Doc::from_string("true")
     Null => Doc::from_string("null")
@@ -76,7 +77,8 @@ fn pretty_print(json : Json, max_column? : Int = 80) -> Doc {
 
 ///|
 test "JSON/array" {
-  let arr : Json = Array(Array::makei(100, fn { x => x.to_json() }))
+  let arr_items = Array::makei(100, fn(x) { x.to_json() })
+  let arr : Json = arr_items.to_json()
   inspect(
     pretty_print(arr),
     content=(
@@ -161,7 +163,7 @@ test "JSOM/pretty_print" {
 ///|
 test "stack overflow test" {
   let len = 1 << 16
-  let arr = Array(Array::makei(len, fn { i => i.to_json() }))
+  let arr = Array::makei(len, fn(i) { i.to_json() }).to_json()
   let str = pretty_print(arr).to_string()
   inspect(str.length(), content="447643")
 }

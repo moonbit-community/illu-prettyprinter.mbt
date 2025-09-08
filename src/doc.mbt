@@ -123,9 +123,11 @@ pub impl Show for Doc with output(self, logger) {
 
 ///|
 pub impl Show for Doc with to_string(self) {
-  let size_hint = self.inner().foldl(0, fn(acc, line) {
-    line.texts.foldl(acc, fn(acc, text) { acc + text.length() })
-  })
+  let size_hint = self
+    .inner()
+    .foldl(0, fn(acc, line) {
+      line.texts.foldl(acc, fn(acc, text) { acc + text.length() })
+    })
   let builder = StringBuilder::new(size_hint~)
   self.output(builder)
   builder.to_string()
