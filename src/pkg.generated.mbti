@@ -7,7 +7,6 @@ import(
 )
 
 // Values
-fn[T : Compare] maximum(Iter[T]) -> T?
 
 // Errors
 

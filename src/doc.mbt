@@ -73,7 +73,7 @@ pub fn Doc::lastline_width(self : Doc) -> Int {
 }
 
 ///|
-pub fn[T : Compare] maximum(iter : Iter[T]) -> T? {
+fn[T : Compare] maximum(iter : Iter[T]) -> T? {
   let mut res = None
   for x in iter {
     match res {

@@ -5,9 +5,15 @@
     "illusory0x0/immut_deque": "0.3.4"
   },
   "readme": "README.md",
-  "repository": "",
+  "repository": "https://github.com/moonbit-community/illu-prettyprinter.mbt",
   "license": "Apache-2.0",
-  "keywords": [],
-  "description": "",
+  "keywords": [
+    "pretty-printer",
+    "formatting",
+    "document",
+    "layout",
+    "text-processing"
+  ],
+  "description": "A pretty printer library for MoonBit using immutable deque implementation for efficient document layout and formatting",
   "source": "src"
 }
