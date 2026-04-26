@@ -1,5 +1,5 @@
 ///|
-typealias @immut_deque.T as Deque
+using @immut_deque {type T as Deque}
 
 ///|
 struct Line {
